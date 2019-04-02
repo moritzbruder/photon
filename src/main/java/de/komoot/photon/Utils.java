@@ -24,6 +24,7 @@ public class Utils {
     public static XContentBuilder convert(PhotonDoc doc, String[] languages) throws IOException {
         XContentBuilder builder = XContentFactory.jsonBuilder().startObject()
                 .field(Constants.OSM_ID, doc.getOsmId())
+                .field(Constants.CITY_ID, doc.getCityId())
                 .field(Constants.OSM_TYPE, doc.getOsmType())
                 .field(Constants.OSM_KEY, doc.getTagKey())
                 .field(Constants.OSM_VALUE, doc.getTagValue())

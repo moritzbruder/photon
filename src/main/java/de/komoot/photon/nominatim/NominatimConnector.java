@@ -138,6 +138,7 @@ public class NominatimConnector {
                     rs.getLong("place_id"),
                     "W",
                     rs.getLong("osm_id"),
+                    rs.getLong("city_id"),
                     "place",
                     "house_number",
                     Collections.<String, String>emptyMap(), // no name
@@ -181,6 +182,7 @@ public class NominatimConnector {
                     rs.getLong("place_id"),
                     rs.getString("osm_type"),
                     rs.getLong("osm_id"),
+                    rs.getLong("city_id"),
                     rs.getString("class"),
                     rs.getString("type"),
                     DBUtils.getMap(rs, "name"),
@@ -277,7 +279,7 @@ public class NominatimConnector {
         });
     }
 
-    private static final PhotonDoc FINAL_DOCUMENT = new PhotonDoc(0, null, 0, null, null, null, null, null, null, 0, 0, null, null, 0, 0);
+    private static final PhotonDoc FINAL_DOCUMENT = new PhotonDoc(0, null, 0, 0, null, null, null, null, null, null, 0, 0, null, null, 0, 0);
 
     private class ImportThread implements Runnable {
         private final BlockingQueue<PhotonDoc> documents;
@@ -449,12 +451,14 @@ public class NominatimConnector {
             if (address.isCity()) {
                 if (doc.getCity() == null) {
                     doc.setCity(address.getName());
+                    doc.setCityId(address.getOsmId());
                 } else {
                     // there is more than one city address for this document
                     if (address.hasPlace()) {
                         // this city is more important than the previous one
                         doc.getContext().add(doc.getCity()); // move previous city to context
                         doc.setCity(address.getName()); // use new city
+                        doc.setCityId(address.getOsmId());
                     } else {
                         doc.getContext().add(address.getName());
                     }
@@ -465,9 +469,11 @@ public class NominatimConnector {
             if (address.isCuratedCity()) {
                 if (doc.getCity() == null) {
                     doc.setCity(address.getName());
+                    doc.setCityId(address.getOsmId());
                 } else {
                     doc.getContext().add(doc.getCity()); // move previous city to context
                     doc.setCity(address.getName()); // use new city
+                    doc.setCityId(address.getOsmId());
                 }
                 // do not continue as a curated city might be a state as well
             }

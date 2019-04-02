@@ -35,13 +35,14 @@ public class PhotonDoc {
 
     private Map<String, String> street;
     private Map<String, String> city;
+    private long cityId;
     private Set<Map<String, String>> context = new HashSet<Map<String, String>>();
     private Map<String, String> country;
     private Map<String, String> state;
     private String houseNumber;
     private Point centroid;
 
-    public PhotonDoc(long placeId, String osmType, long osmId, String tagKey, String tagValue, Map<String, String> name, String houseNumber, Map<String, String> extratags, Envelope bbox, long parentPlaceId, double importance, CountryCode countryCode, Point centroid, long linkedPlaceId, int rankSearch) {
+    public PhotonDoc(long placeId, String osmType, long osmId, long cityId, String tagKey, String tagValue, Map<String, String> name, String houseNumber, Map<String, String> extratags, Envelope bbox, long parentPlaceId, double importance, CountryCode countryCode, Point centroid, long linkedPlaceId, int rankSearch) {
         String place = extratags != null ? extratags.get("place") : null;
         if (place != null) {
             // take more specific extra tag information
@@ -52,6 +53,7 @@ public class PhotonDoc {
         this.placeId = placeId;
         this.osmType = osmType;
         this.osmId = osmId;
+        this.cityId = cityId;
         this.tagKey = tagKey;
         this.tagValue = tagValue;
         this.name = name;
@@ -70,6 +72,7 @@ public class PhotonDoc {
         this.placeId = other.placeId;
         this.osmType = other.osmType;
         this.osmId = other.osmId;
+        this.cityId = other.cityId;
         this.tagKey = other.tagKey;
         this.tagValue = other.tagValue;
         this.name = other.name;
@@ -101,7 +104,7 @@ public class PhotonDoc {
      * Used for testing - really all variables required (final)?
      */
     public static PhotonDoc create(long placeId, String osmType, long osmId, Map<String, String> nameMap) {
-        return new PhotonDoc(placeId, osmType, osmId, "", "", nameMap,
+        return new PhotonDoc(placeId, osmType, osmId, 0, "", "", nameMap,
                 "", null, null, 0, 0, null, null, 0, 0);
     }
 

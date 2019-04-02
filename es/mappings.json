@@ -383,6 +383,9 @@
 			"osm_id": {
 				"type": "long"
 			},
+			"city_id": {
+				"type": "long"
+			},
 			"osm_key": {
 				"type": "keyword",
 				"index": true

@@ -23,6 +23,7 @@ public class Constants {
     public static final String POINT = "Point";
     public static final String IMPORTANCE = "importance";
     public static final String OSM_ID = "osm_id";
+    public static final String CITY_ID = "city_id";
     public static final String OSM_TYPE = "osm_type";
     public static final String OSM_KEY = "osm_key";
     public static final String OSM_VALUE = "osm_value";
