@@ -3,15 +3,11 @@
 This is a fork of komoot's [photon](https://github.com/komoot/photon). This version also gives an osm_id for the city of each result, when reverse-geocoding, to make results easier to compare in regards to the city.
 
 It also has the option to run the nominatim import with the option `-import-minimal-details`.
-
-This option removes several fields from the docs sent to the photon_data directory to reduce the directory's size.
+This removes several fields from the docs sent to the photon_data directory to reduce the directory's size.
 The removed fields are the following:  
 ```osm_key, osm_value, name, city, country, state, street, housenumber, postcode```
 
 ------------------
-
-
-[![Build Status](https://secure.travis-ci.org/komoot/photon.png?branch=master)](http://travis-ci.org/komoot/photon)
 
 _Photon_ is an open source geocoder built for [OpenStreetMap](http://www.osm.org) data. It is based on [elasticsearch](http://elasticsearch.org/) - an efficient, powerful and highly scalable search platform.
 
