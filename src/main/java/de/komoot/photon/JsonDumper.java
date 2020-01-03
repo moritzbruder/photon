@@ -25,7 +25,7 @@ public class JsonDumper implements Importer {
     public void add(PhotonDoc doc) {
         try {
             writer.println("{\"index\": {}}");
-            writer.println(Utils.convert(doc, this.languages).string());
+            writer.println(Utils.convert(doc, this.languages, false).string());
         } catch (IOException e) {
             log.error("error writing json file", e);
         }

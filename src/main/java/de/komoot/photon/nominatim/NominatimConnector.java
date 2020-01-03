@@ -342,9 +342,11 @@ public class NominatimConnector {
      * parses every relevant row in placex, creates a corresponding document and calls the {@link #importer} for every document
      */
     public void readEntireDatabase(String... countryCodes) {
+        // process 50k rows at a time
         final int progressInterval = 50000;
         final long startMillis = System.currentTimeMillis();
 
+        // use only given language
         String andCountryCodeStr = "", whereCountryCodeStr = "";
         String countryCodeStr = convertCountryCode(countryCodes);
         if (!countryCodeStr.isEmpty()) {

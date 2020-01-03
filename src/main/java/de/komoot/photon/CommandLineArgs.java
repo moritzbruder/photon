@@ -20,6 +20,9 @@ public class CommandLineArgs {
     @Parameter(names = "-nominatim-import", description = "import nominatim database into photon (this will delete previous index)")
     private boolean nominatimImport = false;
 
+    @Parameter(names = "-nominatim-import-minimal-details", description = "import nominatim database and export to elasticsearch with a minimal dataset (no place name, street name etc.). This is useful to create a smaller dataset if you just want to reverse-geocode for the city_id of some place.")
+    private boolean nominatimImportMinimalExport = false;
+
     @Parameter(names = "-languages", description = "languages nominatim importer should import and use at run-time, comma separated (default is 'en,fr,de,it')")
     private String languages = "en,fr,de,it";
 

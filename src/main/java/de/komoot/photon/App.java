@@ -121,13 +121,18 @@ public class App {
             throw new RuntimeException("cannot setup index, elastic search config files not readable", e);
         }
 
-        log.info("starting import from nominatim to photon with languages: " + args.getLanguages());
-        de.komoot.photon.elasticsearch.Importer importer = new de.komoot.photon.elasticsearch.Importer(esNodeClient, args.getLanguages());
+        log.info("starting import from nominatim to photon with languages: " + args.getLanguages() + " (minimal data export: " + (args.isNominatimImportMinimalExport() ? "YES" : "NO") + ")");
+        int languageCount = args.getLanguages().split(",").length;
+        if (languageCount > 1 && args.isNominatimImportMinimalExport()) {
+            log.warn("attention: you have minimal export enabled but use (" + languageCount + ") languages, this is probably non-sense! (increased file size and import time)");
+
+        }
+        de.komoot.photon.elasticsearch.Importer importer = new de.komoot.photon.elasticsearch.Importer(esNodeClient, args.getLanguages(), args.isNominatimImportMinimalExport());
         NominatimConnector nominatimConnector = new NominatimConnector(args.getHost(), args.getPort(), args.getDatabase(), args.getUser(), args.getPassword());
         nominatimConnector.setImporter(importer);
         nominatimConnector.readEntireDatabase(args.getCountryCodes().split(","));
 
-        log.info("imported data from nominatim to photon with languages: " + args.getLanguages());
+        log.info("imported data from nominatim to photon with languages: " + args.getLanguages() + " (minimal data export: " + (args.isNominatimImportMinimalExport() ? "YES" : "NO") + ")");
     }
 
 

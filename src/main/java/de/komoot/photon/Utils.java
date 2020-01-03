@@ -22,14 +22,18 @@ import java.util.Set;
 public class Utils {
     private static final Joiner commaJoiner = Joiner.on(", ").skipNulls();
 
-    public static XContentBuilder convert(PhotonDoc doc, String[] languages) throws IOException {
+    public static XContentBuilder convert(PhotonDoc doc, String[] languages, boolean minimalDetails) throws IOException {
         XContentBuilder builder = XContentFactory.jsonBuilder().startObject()
                 .field(Constants.OSM_ID, doc.getOsmId())
                 .field(Constants.CITY_ID, doc.getCityId())
                 .field(Constants.OSM_TYPE, doc.getOsmType())
-                .field(Constants.OSM_KEY, doc.getTagKey())
-                .field(Constants.OSM_VALUE, doc.getTagValue())
                 .field(Constants.IMPORTANCE, doc.getImportance());
+
+        if (!minimalDetails) {
+            builder.field(Constants.OSM_KEY, doc.getTagKey());
+            builder.field(Constants.OSM_VALUE, doc.getTagValue());
+
+        }
 
         if (doc.getCentroid() != null) {
             builder.startObject("coordinate")
@@ -46,14 +50,18 @@ public class Utils {
             builder.field("postcode", doc.getPostcode());
         }
 
-        writeName(builder, doc.getName(), languages);
-        writeIntlNames(builder, doc.getCity(), "city", languages);
-        writeIntlNames(builder, doc.getCountry(), "country", languages);
+        if (!minimalDetails) {
+            writeName(builder, doc.getName(), languages);
+            writeIntlNames(builder, doc.getCity(), "city", languages);
+            writeIntlNames(builder, doc.getCountry(), "country", languages);
+            writeIntlNames(builder, doc.getState(), "state", languages);
+            writeIntlNames(builder, doc.getStreet(), "street", languages);
+
+        }
+
         CountryCode countryCode = doc.getCountryCode();
         if (countryCode != null)
             builder.field(Constants.COUNTRYCODE, countryCode.getAlpha2());
-        writeIntlNames(builder, doc.getState(), "state", languages);
-        writeIntlNames(builder, doc.getStreet(), "street", languages);
         writeContext(builder, doc.getContext(), languages);
         writeExtent(builder, doc.getBbox());
 
