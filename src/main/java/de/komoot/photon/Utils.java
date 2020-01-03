@@ -42,15 +42,14 @@ public class Utils {
                     .endObject();
         }
 
-        if (doc.getHouseNumber() != null) {
-            builder.field("housenumber", doc.getHouseNumber());
-        }
-
-        if (doc.getPostcode() != null) {
-            builder.field("postcode", doc.getPostcode());
-        }
-
         if (!minimalDetails) {
+            if (doc.getHouseNumber() != null) {
+                builder.field("housenumber", doc.getHouseNumber());
+            }
+
+            if (doc.getPostcode() != null) {
+                builder.field("postcode", doc.getPostcode());
+            }
             writeName(builder, doc.getName(), languages);
             writeIntlNames(builder, doc.getCity(), "city", languages);
             writeIntlNames(builder, doc.getCountry(), "country", languages);
