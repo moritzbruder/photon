@@ -13,6 +13,7 @@ import static de.komoot.photon.Constants.STATE;
  *
  * @author christoph
  */
+@SuppressWarnings("RedundantIfStatement")
 @Data
 public class AddressRow {
     final private long placeId;
@@ -44,6 +45,10 @@ public class AddressRow {
     }
 
     public boolean isCity() {
+        if (!"R".equals(osmType)) {
+            return false;
+        }
+
         if ("place".equals(osmKey) && Arrays.binarySearch(CITY_PLACE_VALUES, osmValue) >= 0) {
             return true;
         }
