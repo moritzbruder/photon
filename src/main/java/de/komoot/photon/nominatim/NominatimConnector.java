@@ -515,8 +515,8 @@ public class NominatimConnector {
         }
 
         // If document has city_id 0 and is a relation, it is probably a city itself. So we set city_id := place_id
-        if (doc.getOsmType().equals("R") && doc.getCityId() == 0) {
-            doc.setCityId(doc.getPlaceId());
+        if (doc.getCityId() == 0) {
+            doc.setCityId(doc.getOsmId());
 
         }
 

@@ -45,10 +45,6 @@ public class AddressRow {
     }
 
     public boolean isCity() {
-        if (!"R".equals(osmType)) {
-            return false;
-        }
-
         if ("place".equals(osmKey) && Arrays.binarySearch(CITY_PLACE_VALUES, osmValue) >= 0) {
             return true;
         }
