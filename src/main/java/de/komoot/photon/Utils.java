@@ -22,7 +22,7 @@ import java.util.Set;
 public class Utils {
     private static final Joiner commaJoiner = Joiner.on(", ").skipNulls();
 
-    public static XContentBuilder convert(PhotonDoc doc, String[] languages, boolean minimalDetails) throws IOException {
+    public static XContentBuilder convert(PhotonDoc doc, String[] languages) throws IOException {
         XContentBuilder builder = XContentFactory.jsonBuilder().startObject()
                 .field(Constants.OSM_ID, doc.getOsmId())
                 .field(Constants.CITY_ID, doc.getCityId())
@@ -38,22 +38,18 @@ public class Utils {
                     .endObject();
         }
 
-        if (!minimalDetails) {
-            if (doc.getHouseNumber() != null) {
-                builder.field("housenumber", doc.getHouseNumber());
-            }
-
-            if (doc.getPostcode() != null) {
-                builder.field("postcode", doc.getPostcode());
-            }
-            writeName(builder, doc.getName(), languages);
-            writeIntlNames(builder, doc.getCity(), "city", languages);
-            writeIntlNames(builder, doc.getCountry(), "country", languages);
-            writeIntlNames(builder, doc.getState(), "state", languages);
-            writeIntlNames(builder, doc.getStreet(), "street", languages);
+        if (doc.getHouseNumber() != null) {
+            builder.field("housenumber", doc.getHouseNumber());
         }
 
-        //}
+        if (doc.getPostcode() != null) {
+            builder.field("postcode", doc.getPostcode());
+        }
+        writeName(builder, doc.getName(), languages);
+        writeIntlNames(builder, doc.getCity(), "city", languages);
+        writeIntlNames(builder, doc.getCountry(), "country", languages);
+        writeIntlNames(builder, doc.getState(), "state", languages);
+        writeIntlNames(builder, doc.getStreet(), "street", languages);
 
         CountryCode countryCode = doc.getCountryCode();
         if (countryCode != null)
