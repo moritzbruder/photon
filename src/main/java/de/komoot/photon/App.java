@@ -64,6 +64,16 @@ public class App {
                 return;
             }
 
+            if (args.isNominatimUpdate()) {
+                shutdownES = true;
+                log.info("Ensuring that the cluster is ready, this might take some time.");
+                // inspired by https://stackoverflow.com/a/50316299
+                esClient.admin().cluster().prepareHealth().setWaitForGreenStatus().execute().actionGet();
+                final NominatimUpdater nominatimUpdater = setupNominatimUpdater(args, esClient);
+                nominatimUpdater.update();
+                return;
+            }
+
             // no special action specified -> normal mode: start search API
             startApi(args, esClient);
         } finally {
@@ -127,6 +137,18 @@ public class App {
         nominatimConnector.readEntireDatabase(args.getCountryCodes().split(","));
     }
 
+    /**
+     * Prepare Nominatim updater
+     *
+     * @param args
+     * @param esNodeClient
+     */
+    private static NominatimUpdater setupNominatimUpdater(CommandLineArgs args, Client esNodeClient) {
+        NominatimUpdater nominatimUpdater = new NominatimUpdater(args.getHost(), args.getPort(), args.getDatabase(), args.getUser(), args.getPassword());
+        Updater updater = new de.komoot.photon.elasticsearch.Updater(esNodeClient, args.getLanguages());
+        nominatimUpdater.setUpdater(updater);
+        return nominatimUpdater;
+    }
 
     /**
      * start api to accept search requests via http
@@ -154,10 +176,7 @@ public class App {
         get("reverse/", new ReverseSearchRequestHandler("reverse/", esNodeClient, args.getLanguages()));
 
         // setup update API
-        final NominatimUpdater nominatimUpdater = new NominatimUpdater(args.getHost(), args.getPort(), args.getDatabase(), args.getUser(), args.getPassword());
-        Updater updater = new de.komoot.photon.elasticsearch.Updater(esNodeClient, args.getLanguages());
-        nominatimUpdater.setUpdater(updater);
-
+        final NominatimUpdater nominatimUpdater = setupNominatimUpdater(args, esNodeClient);
         get("/nominatim-update", (Request request, Response response) -> {
             new Thread(() -> nominatimUpdater.update()).start();
             return "nominatim update started (more information in console output) ...";
