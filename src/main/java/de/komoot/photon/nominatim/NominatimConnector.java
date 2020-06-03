@@ -457,7 +457,7 @@ public class NominatimConnector {
             if (address.isCity()) {
                 if (doc.getCity() == null) {
                     doc.setCity(address.getName());
-                    doc.setCityId(address.getOsmId());
+                    doc.setCityId(address.getPlaceId());
                 } else {
                     doc.getContext().add(address.getName());
                 }
