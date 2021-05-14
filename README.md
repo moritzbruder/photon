@@ -1,8 +1,7 @@
 # photon
 
 This is a fork of komoot's [photon](https://github.com/komoot/photon). This version also gives an osm_id for the city of each result, when reverse-geocoding, to make results easier to compare in regards to the city.
-
-This change in the data structure requires new datasets to be built using nomincatim, this version does not work with the datasets provided by the photon developers.
+This change in the data structure requires new datasets to be built using nominatim, this version does not work with the datasets provided by the photon developers.
 
 ------------------
 
